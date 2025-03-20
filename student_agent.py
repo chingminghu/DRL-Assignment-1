@@ -100,8 +100,8 @@ def get_action(obs):
     state = torch.tensor([dx, dy, carrying, obs[10], obs[11], obs[12], obs[13]], dtype = torch.float32)
     action = agent.choose_action(state)
     
-    if np.random.rand() < epsilon:
-        action = np.random.randint(n_actions)
+    # if np.random.rand() < epsilon:
+    #     action = np.random.randint(n_actions)
     
     passenger_look = obs[14]
     destination_look = obs[15]
