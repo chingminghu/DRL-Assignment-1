@@ -40,8 +40,8 @@ class Value_Network(nn.Module):
 
 class Agent():
     def __init__(self):
-        self.actor = Policy_Network(n_states, 512, n_actions)
-        self.critic = Value_Network(n_states, 512)
+        self.actor = Policy_Network(n_states, 512, n_actions).eval()
+        self.critic = Value_Network(n_states, 512).eval()
         
         self.softmax = nn.Softmax(dim = -1)
         
