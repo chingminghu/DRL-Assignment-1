@@ -57,7 +57,7 @@ class Agent():
         self.critic.load_state_dict(torch.load(critic_path, map_location = torch.device("cpu"), weights_only = True))
 
 agent = Agent()
-agent.load_model(f'actor.ckpt', f'critic.ckpt')
+agent.load_model(f'./actor.ckpt', f'./critic.ckpt')
 
 carrying = 0
 stations_pos = None
