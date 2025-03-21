@@ -8,7 +8,7 @@ from torch import nn
 from torch.distributions import Categorical
 
 n_actions = 6
-n_states = 7
+n_states = 9
 
 class Policy_Network(nn.Module):
     def __init__(self,input_size, hidden_size, output_size):
@@ -103,16 +103,16 @@ def get_action(obs):
     dx = 1 if dx > 0 else -1 if dx < 0 else 0
     dy = taxi_pos[1] - target[1]
     dy = 1 if dy > 0 else -1 if dy < 0 else 0
+    
+    passenger_look = obs[14]
+    destination_look = obs[15]
 
-    state = torch.tensor([dx, dy, carrying, obstacle_north + obs[10], obstacle_south + obs[11], obstacle_east + obs[12], obstacle_west + obs[13]], dtype = torch.float32)
+    state = torch.tensor([dx, dy, carrying, passenger_look, destination_look, obstacle_north + obs[10], obstacle_south + obs[11], obstacle_east + obs[12], obstacle_west + obs[13]], dtype = torch.float32)
     # print(f'state: {state}')
     action = agent.choose_action(state)
     
     if np.random.rand() < epsilon:
         action = np.random.randint(n_actions)
-    
-    passenger_look = obs[14]
-    destination_look = obs[15]
     
     if stations_pos and taxi_pos in stations_pos:
         if passenger_look and passenger_pos is None:
