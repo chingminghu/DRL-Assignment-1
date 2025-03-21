@@ -48,6 +48,7 @@ class Agent():
     def choose_action(self, state):
         logit = self.actor(state)
         probs = self.softmax(logit)
+        print(f'probs: {probs}')
         action = Categorical(probs).sample()
         return action.item()
         
