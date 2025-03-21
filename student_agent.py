@@ -111,8 +111,8 @@ def get_action(obs):
     # print(f'state: {state}')
     action = agent.choose_action(state)
     
-    if np.random.rand() < epsilon:
-        action = np.random.randint(n_actions)
+    # if np.random.rand() < epsilon:
+    #     action = np.random.randint(n_actions)
     
     if stations_pos and taxi_pos in stations_pos:
         if passenger_look and passenger_pos is None:
