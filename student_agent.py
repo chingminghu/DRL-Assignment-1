@@ -62,7 +62,7 @@ agent.load_model(f'./actor.pt', f'./critic.pt')
 carrying = 0
 stations_pos = None
 
-desti_pos, passenger_pos = None, None
+desti_pos, passenger_pos = None, None 
 target = None
 
 obstacle_north, obstacle_south, obstacle_east, obstacle_west = 0, 0, 0, 0
