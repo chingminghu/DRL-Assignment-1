@@ -64,6 +64,8 @@ stations_pos = None
 desti_pos, passenger_pos = None, None
 target = None
 
+obstacle_north, obstacle_south, obstacle_east, obstacle_west = 0, 0, 0, 0
+
 def get_target():
     global stations_pos, passenger_pos, desti_pos, carrying, target
     
@@ -77,7 +79,7 @@ def get_target():
 epsilon = 0.1
 
 def get_action(obs):
-    global stations_pos, passenger_pos, desti_pos, carrying, target, epsilon
+    global stations_pos, passenger_pos, desti_pos, carrying, target, epsilon, obstacle_north, obstacle_south, obstacle_east, obstacle_west
     
     # TODO: Train your own agent
     # HINT: If you're using a Q-table, consider designing a custom key based on `obs` to store useful information.
@@ -97,7 +99,8 @@ def get_action(obs):
     dy = taxi_pos[1] - target[1]
     dy = 1 if dy > 0 else -1 if dy < 0 else 0
 
-    state = torch.tensor([dx, dy, carrying, obs[10], obs[11], obs[12], obs[13]], dtype = torch.float32)
+    state = torch.tensor([dx, dy, carrying, obstacle_north + obs[10], obstacle_south + obs[11], obstacle_east + obs[12], obstacle_west + obs[13]], dtype = torch.float32)
+    # print(f'state: {state}')
     action = agent.choose_action(state)
     
     if np.random.rand() < epsilon:
@@ -121,6 +124,27 @@ def get_action(obs):
     elif not carrying and action == 4 and taxi_pos == passenger_pos:
         carrying = 1
         target = get_target()
+                
+    if action == 0 and obs[11] == 0:
+        # south
+        obsticle_north = (obs[12] + obs[13]) * 0.1
+        obstacle_west = obs[13] * 0.1
+        obstacle_east = obs[12] * 0.1
+    elif action == 1 and obs[10] == 0:
+        # north
+        obstacle_south = (obs[12] + obs[13]) * 0.1
+        obstacle_west = obs[13] * 0.1
+        obstacle_east = obs[12] * 0.1
+    elif action == 2 and obs[12] == 0:
+        # east
+        obstacle_west = (obs[10] + obs[11]) * 0.1
+        obstacle_north = obs[10] * 0.1
+        obstacle_south = obs[11] * 0.1
+    elif action == 3 and obs[13] == 0:
+        # west
+        obstacle_east = (obs[10] + obs[11]) * 0.1
+        obstacle_north = obs[10] * 0.1
+        obstacle_south = obs[11] * 0.1
     
     return action
 
