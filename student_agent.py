@@ -66,7 +66,7 @@ target = None
 
 obstacle_north, obstacle_south, obstacle_east, obstacle_west = 0, 0, 0, 0
 
-def get_target():
+def get_target(obs):
     global stations_pos, passenger_pos, desti_pos, carrying, target
     
     if carrying and desti_pos:
@@ -74,7 +74,11 @@ def get_target():
     elif not carrying and passenger_pos:
         return passenger_pos
     else:
-        return stations_pos[0]
+        taxi_pos = (obs[0], obs[1])
+        station_dis = []
+        for station in stations_pos:
+            station_dis.append(abs(station[0] - taxi_pos[0]) + abs(station[1] - taxi_pos[1]))
+        return stations_pos[station_dis.index(min(station_dis))]
     
 epsilon = 0.1
 
@@ -90,7 +94,7 @@ def get_action(obs):
     taxi_pos = (obs[0], obs[1])
     if stations_pos == None:
         stations_pos = [(obs[2], obs[3]), (obs[4], obs[5]), (obs[6], obs[7]), (obs[8], obs[9])]
-        target = get_target()
+        target = get_target(obs)
     passenger_look = obs[14]
     destination_look = obs[15]
     
@@ -115,34 +119,34 @@ def get_action(obs):
         elif destination_look and desti_pos is None:
             desti_pos = taxi_pos
         stations_pos.remove(taxi_pos)
-        target = get_target()
+        target = get_target(obs)
     
     if carrying and action == 5:
         passenger_pos = taxi_pos
         carrying = 0
-        target = get_target()
+        target = get_target(obs)
     elif not carrying and action == 4 and taxi_pos == passenger_pos:
         carrying = 1
-        target = get_target()
+        target = get_target(obs)
                 
     if action == 0 and obs[11] == 0:
         # south
-        obsticle_north = (obs[12] + obs[13]) * 0.1
+        obsticle_north = (obs[12] + obs[13]) * 0.5
         obstacle_west = obs[13] * 0.1
         obstacle_east = obs[12] * 0.1
     elif action == 1 and obs[10] == 0:
         # north
-        obstacle_south = (obs[12] + obs[13]) * 0.1
+        obstacle_south = (obs[12] + obs[13]) * 0.5
         obstacle_west = obs[13] * 0.1
         obstacle_east = obs[12] * 0.1
     elif action == 2 and obs[12] == 0:
         # east
-        obstacle_west = (obs[10] + obs[11]) * 0.1
+        obstacle_west = (obs[10] + obs[11]) * 0.5
         obstacle_north = obs[10] * 0.1
         obstacle_south = obs[11] * 0.1
     elif action == 3 and obs[13] == 0:
         # west
-        obstacle_east = (obs[10] + obs[11]) * 0.1
+        obstacle_east = (obs[10] + obs[11]) * 0.5
         obstacle_north = obs[10] * 0.1
         obstacle_south = obs[11] * 0.1
     
