@@ -132,22 +132,22 @@ def get_action(obs):
                 
     if action == 0 and obs[11] == 0:
         # south
-        obsticle_north = (obs[12] + obs[13]) * 0.5
+        obsticle_north = (obs[12] + obs[13]) * 0.3
         obstacle_west = obs[13] * 0.1
         obstacle_east = obs[12] * 0.1
     elif action == 1 and obs[10] == 0:
         # north
-        obstacle_south = (obs[12] + obs[13]) * 0.5
+        obstacle_south = (obs[12] + obs[13]) * 0.3
         obstacle_west = obs[13] * 0.1
         obstacle_east = obs[12] * 0.1
     elif action == 2 and obs[12] == 0:
         # east
-        obstacle_west = (obs[10] + obs[11]) * 0.5
+        obstacle_west = (obs[10] + obs[11]) * 0.3
         obstacle_north = obs[10] * 0.1
         obstacle_south = obs[11] * 0.1
     elif action == 3 and obs[13] == 0:
         # west
-        obstacle_east = (obs[10] + obs[11]) * 0.5
+        obstacle_east = (obs[10] + obs[11]) * 0.3
         obstacle_north = obs[10] * 0.1
         obstacle_south = obs[11] * 0.1
     
